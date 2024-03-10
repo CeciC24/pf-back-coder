@@ -10,18 +10,18 @@ class CartManager {
 		this.carts = []
 	}
 
-	addCart = async () => {
+	async addCart() {
         this.carts = await this.getCarts()
 
 		await this.saveCart({id: nanoid(), products: []}, ...this.carts)
 	}
     
-	saveCart = async (cartToSave) => {
+	async saveCart(cartToSave) {
         this.carts.push(cartToSave)
 		await fs.promises.writeFile(this.path, JSON.stringify(this.carts, null, '\t'))
 	}
     
-    getCarts = async () => {
+    async getCarts() {
         if (fs.existsSync(this.path)) {
             let response = await fs.promises.readFile(this.path, 'utf-8')
             return JSON.parse(response)
@@ -30,7 +30,7 @@ class CartManager {
         }
     }
     
-	getCartById = async (id) => {
+	async getCartById(id) {
 		let response = await this.getCarts()
 		let search = response.find(cart => cart.id === id)
 
@@ -41,7 +41,7 @@ class CartManager {
 		}
 	}
 
-    addProductToCart = async (cid, pid) => {
+    async addProductToCart(cid, pid) {
         let cart = await this.exists(cid)
         let product = await AllProducts.exists(pid)
 
@@ -59,12 +59,12 @@ class CartManager {
         }
     }
 
-	updateCart = async (cart) => {
+	async updateCart(cart) {
 		await this.deleteCart(cart.id)
 		await this.saveCart(cart)
 	}
 
-	deleteCart = async (id) => {
+	async deleteCart(id) {
         this.carts = await this.getCarts()
 		let filter = this.carts.filter(cart => cart.id !== id)
 
@@ -77,7 +77,7 @@ class CartManager {
 		this.carts = await this.getCarts()
 	}
 
-    exists = async (id) => {
+    async exists(id) {
 		let response = await this.getCarts()
 		let search = response.find(cart => cart.id === id)
 

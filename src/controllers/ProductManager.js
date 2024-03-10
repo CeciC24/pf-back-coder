@@ -7,7 +7,7 @@ class ProductManager {
 		this.products = []
 	}
 
-	addProduct = async (productToAdd) => {
+	async addProduct(productToAdd) {
 		if (fs.existsSync(this.path)) {
 			this.products = await this.getProducts()
 			const search = this.products.find((product) => product.code === productToAdd.code)
@@ -22,7 +22,7 @@ class ProductManager {
 		await this.saveProduct({ id: nanoid(), status: true, ...productToAdd })
 	}
 
-	isValidProduct = (product) => {
+	async isValidProduct(product) {
 		if (
 			(!product.title ||
 				!product.description ||
@@ -38,12 +38,12 @@ class ProductManager {
 		return true
 	}
 
-	saveProduct = async (productToSave) => {
+	async saveProduct(productToSave) {
 		this.products.push(productToSave)
 		await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, '\t'))
 	}
 
-	getProducts = async () => {
+	async getProducts() {
 		if (fs.existsSync(this.path)) {
 			let response = await fs.promises.readFile(this.path, 'utf-8')
 			return JSON.parse(response)
@@ -52,7 +52,7 @@ class ProductManager {
 		}
 	}
 
-	getProductById = async (id) => {
+	async getProductById(id) {
 		let search = this.exists(id)
 
 		if (search) {
@@ -62,7 +62,7 @@ class ProductManager {
 		}
 	}
 
-	updateProduct = async (id, field) => {
+	async updateProduct(id, field) {
 		let oldProduct = await this.getProductById(id)
 
 		await this.deleteProduct(id)
@@ -72,7 +72,7 @@ class ProductManager {
 		await this.saveProduct(newProduct)
 	}
 
-	deleteProduct = async (id) => {
+	async deleteProduct(id) {
 		this.products = await this.getProducts()
 		let filter = this.products.filter((product) => product.id !== id)
 
@@ -85,7 +85,7 @@ class ProductManager {
 		this.products = await this.getProducts()
 	}
 
-	exists = async (id) => {
+	async exists(id) {
 		let response = await this.getProducts()
 		let search = response.find((product) => product.id === id)
 
