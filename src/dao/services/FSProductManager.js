@@ -19,7 +19,9 @@ class ProductManager {
 			}
 		}
 
-		await this.saveProduct({ id: nanoid(), status: true, ...productToAdd })
+		const productSaved = await this.saveProduct({ id: nanoid(), status: true, ...productToAdd }) 
+
+		return productSaved
 	}
 
 	async isValidProduct(product) {
@@ -41,6 +43,8 @@ class ProductManager {
 	async saveProduct(productToSave) {
 		this.products.push(productToSave)
 		await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, '\t'))
+
+		return productToSave
 	}
 
 	async getProducts() {
@@ -69,7 +73,9 @@ class ProductManager {
 
 		let newProduct = { ...oldProduct, ...field }
 
-		await this.saveProduct(newProduct)
+		const updatedProduct = await this.saveProduct(newProduct)
+
+		return updatedProduct
 	}
 
 	async deleteProduct(id) {

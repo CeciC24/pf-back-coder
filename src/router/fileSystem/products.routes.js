@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import ProductManager from '../controllers/ProductManager.js'
+import ProductManager from '../../dao/services/FSProductManager.js'
 
-const ProductMngr = new ProductManager('src/models/products.json')
+const ProductMngr = new ProductManager('src/data/products.json')
 const ProductRouter = Router()
 
 const getProducts = ProductMngr.getProducts()

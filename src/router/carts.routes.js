@@ -1,18 +1,19 @@
 import { Router } from 'express';
-import CartManager from '../controllers/CartManager.js'
+import CartManager from '../dao/services/CartManager.js';
 
-const CartMngr = new CartManager('src/models/cart.json')
-const CartRouter = Router()
+const CartMngr = new CartManager()
+const CartsRouter = Router()
 
-CartRouter.post("/", async (req, res) => {
+CartsRouter.post("/", async (req, res) => {
     try {
-        res.send(await CartMngr.addCart())
+        let newCart = await CartMngr.addCart()
+        res.send(newCart)
     } catch (error) {
         res.status(500).send({ error: 'Error al crear carrito' })
     }
 })
 
-CartRouter.get("/", async (req, res) => {
+CartsRouter.get("/", async (req, res) => {
     try {
         res.send(await CartMngr.getCarts())
     } catch (error) {
@@ -20,7 +21,7 @@ CartRouter.get("/", async (req, res) => {
     }
 })
 
-CartRouter.get("/:cid", async (req, res) => {
+CartsRouter.get("/:cid", async (req, res) => {
     let cid = req.params.cid
 
     try {
@@ -30,15 +31,59 @@ CartRouter.get("/:cid", async (req, res) => {
     }
 })
 
-CartRouter.post("/:cid/product/:pid", async (req, res) => {
+CartsRouter.post("/:cid/product/:pid", async (req, res) => {
     let cid = req.params.cid
     let pid = req.params.pid
 
     try {
         res.send(await CartMngr.addProductToCart(cid, pid))
     } catch (error) {
-        res.status(500).send({ error: 'Error al agregar producto al carrito' })
+        res.status(500).send({ error: 'Error al agregar producto al carrito | ' + error.message })
     }
 })
 
-export default CartRouter
+CartsRouter.delete("/:cid/product/:pid", async (req, res) => {
+    let cid = req.params.cid
+    let pid = req.params.pid
+
+    try {
+        res.send(await CartMngr.deleteProductFromCart(cid, pid))
+    } catch (error) {
+        res.status(500).send({ error: 'Error al eliminar producto del carrito | ' + error.message })
+    }
+})
+
+CartsRouter.delete("/:cid", async (req, res) => {
+    let cid = req.params.cid
+
+    try {
+        res.send(await CartMngr.emptyCart(cid))
+    } catch (error) {
+        res.status(500).send({ error: 'Error al vaciar carrito' })
+    }
+})
+
+CartsRouter.put("/:cid", async (req, res) => {
+    let cid = req.params.cid
+    let newCartProducts = req.body
+
+    try {
+        res.send(await CartMngr.updateCart(cid, newCartProducts))
+    } catch (error) {
+        res.status(500).send({ error: 'Error al actualizar carrito' })
+    }
+})
+
+CartsRouter.put("/:cid/product/:pid", async (req, res) => {
+    let cid = req.params.cid
+    let pid = req.params.pid
+    let newQuantity = req.body
+
+    try {
+        res.send(await CartMngr.updateProductInCart(cid, pid, newQuantity))
+    } catch (error) {
+        res.status(500).send({ error: 'Error al actualizar producto del carrito' })
+    }
+})
+
+export default CartsRouter

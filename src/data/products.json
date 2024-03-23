@@ -7,7 +7,8 @@
 		"code": "abc125",
 		"price": 100,
 		"stock": 29,
-		"category": "Zapatos"
+		"category": "Zapatos",
+		"thumbnails": []
 	},
 	{
 		"id": "5abwt7kVjl34aCDsOJELN",
