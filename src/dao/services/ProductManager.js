@@ -1,9 +1,7 @@
 import ProductsModel from "../models/productsModel.js";
 
 class ProductManager {
-    constructor() {
-        console.log('ProductManager constructor')
-    }
+    constructor() {}
 
     async addProduct(newProduct) {
         let response = await ProductsModel.create(newProduct)

@@ -4,9 +4,7 @@ import ProductManager from './ProductManager.js'
 const ProductMngr = new ProductManager()
 
 class CartManager {
-	constructor() {
-		console.log('CartManager constructor')
-	}
+	constructor() {}
 
 	async addCart(newCart = { products: [] }) {
 		let response = await CartsModel.create(newCart)

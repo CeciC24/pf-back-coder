@@ -1,9 +1,7 @@
 import MessagesModel from '../models/messagesModel.js'
 
 class MessagesManager {
-	constructor() {
-		console.log('MessagesManager constructor')
-	}
+	constructor() {}
 
 	async addMessage(newMessage) {
 		let response = await MessagesModel.create(newMessage)
