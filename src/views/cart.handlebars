@@ -1,0 +1,16 @@
+<div>
+    <h2>Carrito</h2>
+    <ul>
+        {{#each products}}
+            <li>{{product.title}} - Cantidad: {{quantity}} - Precio: {{product.price}}</li>
+        {{/each}}
+    </ul>
+</div>
+
+<div>
+    <p>Total: {{total}}</p>
+</div>
+
+<div>
+    <a href='/products'>Volver a todos los productos</a>
+</div>

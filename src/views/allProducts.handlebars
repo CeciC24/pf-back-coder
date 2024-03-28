@@ -1,0 +1,21 @@
+<script src='js/paginate.js'></script>
+
+<div>
+	<h1>Todos los productos</h1>
+
+	{{#each products}}
+		<h3>{{title}}</h3>
+		<p>{{description}}</p>
+		<p>Precio: {{price}}</p>
+
+		<a href='/products/{{_id}}'>Ver producto</a>
+	{{/each}}
+</div>
+
+<nav aria-label='...'>
+	<ul id='pagination' class='pagination'>
+
+		<script>generatePagination({{totalPages}}, {{page}}, '/products')</script>
+
+	</ul>
+</nav>
