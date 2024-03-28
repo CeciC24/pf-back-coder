@@ -2,23 +2,23 @@ import express from 'express'
 import handlebars from 'express-handlebars'
 import __dirname from './utils.js'
 import { Server } from 'socket.io'
-import mongoose from 'mongoose'
+import connectDb from './config/db.config.js'
 
-// Router imports para file system
+// Router imports para File System
 import ProductRouter from './router/fileSystem/products.routes.js'
 import CartRouter from './router/fileSystem/carts.routes.js'
 
-// Router imports para mongoDB
+// Router imports para MongoDB
 import ViewsRouter from './router/views.routes.js'
 import ProductsRouter from './router/products.routes.js'
 import CartsRouter from './router/carts.routes.js'
 import MessagesRouter from './router/messages.routes.js'
 
-import ProductManager from './dao/services/FSProductManager.js'
+import FSProductManager from './dao/services/FSProductManager.js'
 
 const app = express()
 
-const ProductMngr = new ProductManager('src/data/products.json')
+const FSProductMngr = new FSProductManager('src/data/products.json')
 
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
@@ -32,37 +32,25 @@ app.use(express.urlencoded({ extended: true }))
 // Rutas para views
 app.use('/', ViewsRouter)
 
-// Rutas para file system
+// Rutas para File System
 app.use('/api/fs/products', ProductRouter)
 app.use('/api/fs/cart', CartRouter)
 
-// Rutas para mongoDB
+// Rutas para MongoDB
 app.use('/api/products', ProductsRouter)
 app.use('/api/cart', CartsRouter)
 app.use('/api/messages', MessagesRouter)
 
-
-const environment = async () => {
-	const DB_URL = 'mongodb+srv://cecic24:4193531@codercluster.8naffdo.mongodb.net/ecommerce'
-
-	try {
-		await mongoose.connect(DB_URL)
-		console.log('Database connected')
-	} catch (error) {
-		console.error('Error connecting to the database:', error.message)
-		process.exit()
-	}
-}
-
-environment()
 
 const PORT = process.env.PORT || 8080
 const server = app.listen(PORT, () => {
 	console.log(`Server running in port ${server.address().port}`)
 })
 
-const io = new Server(server)
+connectDb()
 
+
+const io = new Server(server)
 server.on('error', (error) => console.error(`Server error: ${error}`))
 
 io.on('connection', (socket) => {
@@ -70,7 +58,7 @@ io.on('connection', (socket) => {
 
 	socket.on('addProduct', async (product) => {
 		try {
-			const productAdded = await ProductMngr.addProduct(product)
+			const productAdded = await FSProductMngr.addProduct(product)
 			io.emit('addToTheList', productAdded)
 		} catch (error) {
 			console.error(error.message)
@@ -79,10 +67,17 @@ io.on('connection', (socket) => {
 
 	socket.on('deleteProduct', async (productID) => {
 		try {
-			await ProductMngr.deleteProduct(productID)
+			await FSProductMngr.deleteProduct(productID)
 			io.emit('deleteFromList', productID)
 		} catch (error) {
 			console.error(error.message)
 		}
+	})
+
+	socket.on('addToCart', async (product) => {
+		// Aún no implementado
+
+		/* const cart = await CartMngr.addProductToCart(cartID, product._id) */
+		/* io.emit('productAddedToCart', cart) */
 	})
 })
