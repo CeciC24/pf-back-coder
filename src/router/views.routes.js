@@ -82,7 +82,6 @@ router.get('/products/:id', async (req, res) => {
 
 	try {
 		const product = await ProductsModel.findById(id).lean()
-		console.log(product)
 
 		if(!product) {
 			return res.status(404).send({ error: 'Producto no encontrado' })

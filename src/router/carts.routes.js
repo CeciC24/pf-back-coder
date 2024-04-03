@@ -4,15 +4,6 @@ import CartManager from '../dao/services/CartManager.js';
 const CartMngr = new CartManager()
 const CartsRouter = Router()
 
-CartsRouter.post("/", async (req, res) => {
-    try {
-        let newCart = await CartMngr.addCart()
-        res.status(200).send(newCart)
-    } catch (error) {
-        res.status(500).send({ error: 'Error al crear carrito' })
-    }
-})
-
 CartsRouter.get("/", async (req, res) => {
     try {
         res.status(200).send(await CartMngr.getCarts())
@@ -23,11 +14,20 @@ CartsRouter.get("/", async (req, res) => {
 
 CartsRouter.get("/:cid", async (req, res) => {
     let cid = req.params.cid
-
+    
     try {
         res.status(200).send(await CartMngr.getCartById(cid))
     } catch (error) {
         res.status(404).send({ error: 'Carrito no encontrado' })
+    }
+})
+
+CartsRouter.post("/", async (req, res) => {
+    try {
+        let newCart = await CartMngr.addCart()
+        res.status(200).send(newCart)
+    } catch (error) {
+        res.status(500).send({ error: 'Error al crear carrito' })
     }
 })
 
@@ -66,7 +66,7 @@ CartsRouter.delete("/:cid", async (req, res) => {
 CartsRouter.put("/:cid", async (req, res) => {
     let cid = req.params.cid
     let newCartProducts = req.body
-
+    
     try {
         res.status(200).send(await CartMngr.updateCart(cid, newCartProducts))
     } catch (error) {
@@ -82,7 +82,7 @@ CartsRouter.put("/:cid/product/:pid", async (req, res) => {
     try {
         res.status(200).send(await CartMngr.updateProductInCart(cid, pid, newQuantity))
     } catch (error) {
-        res.status(500).send({ error: 'Error al actualizar producto del carrito' })
+        res.status(500).send({ error: 'Error al actualizar la cantidad del producto en carrito' })
     }
 })
 
