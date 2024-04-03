@@ -70,16 +70,9 @@ class CartManager {
 
 	async updateCart(cid, newCartProducts) {
 		const cart = await this.getCartById(cid)
+		this.emptyCart(cart._id)
 
-		newCartProducts.forEach((newProduct) => {
-			let productInCart = cart.products.find((p) => p.product._id == newProduct.product._id)
-
-			if (productInCart) {
-				productInCart.quantity = newProduct.quantity
-			} else {
-				this.addProductToCart(cid, newProduct.product._id)
-			}
-		})
+		cart.products = newCartProducts
 
 		return await cart.save()
 	}
@@ -109,9 +102,8 @@ class CartManager {
 	}
 
 	async emptyCart(id) {
-		let response = await CartsModel.findByIdAndUpdate(id, { products: [] })
-		let emptyCart = await this.getCartById(id)
-		return emptyCart
+		let emptyCart = await CartsModel.findByIdAndUpdate(id, { products: [] })
+		return await emptyCart.save()
 	}
 }
 
