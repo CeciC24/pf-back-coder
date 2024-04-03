@@ -59,7 +59,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/products?limit=2",
+							"raw": "http://localhost:8080/api/products?limit=3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -72,7 +72,121 @@
 							"query": [
 								{
 									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All products with page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products?page=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
 									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All products with sort by price",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products?sort=asc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All products with filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/products?query={\"category\":\"Anillo\"}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "{\"category\":\"Anillo\"}"
 								}
 							]
 						}
@@ -131,7 +245,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"Producto de prueba 5\",\r\n    \"description\": \"Este es el producto de prueba 5\",\r\n    \"code\": \"abc127\",\r\n    \"price\": 300,\r\n    \"stock\": 10,\r\n    \"category\": \"Guantes\"\r\n}",
+							"raw": "{\r\n    \"title\": \"Producto de prueba 13\",\r\n    \"description\": \"Este es el producto de prueba 13\",\r\n    \"code\": \"abc135\",\r\n    \"price\": 1200,\r\n    \"stock\": 27,\r\n    \"category\": \"Lentes\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -259,7 +373,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/cart/65fc9ae579941973b9829e61",
+							"raw": "http://localhost:8080/api/cart/660db62eeb3d157e265feddf",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -268,7 +382,7 @@
 							"path": [
 								"api",
 								"cart",
-								"65fc9ae579941973b9829e61"
+								"660db62eeb3d157e265feddf"
 							]
 						}
 					},
@@ -324,7 +438,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/cart/65fc9ae579941973b9829e61/product/65fc9eb079941973b9829e6d",
+							"raw": "http://localhost:8080/api/cart/660db62eeb3d157e265feddf/product/65fd8fbc94d6fa9905eebf4f",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -333,9 +447,9 @@
 							"path": [
 								"api",
 								"cart",
-								"65fc9ae579941973b9829e61",
+								"660db62eeb3d157e265feddf",
 								"product",
-								"65fc9eb079941973b9829e6d"
+								"65fd8fbc94d6fa9905eebf4f"
 							]
 						}
 					},
@@ -359,7 +473,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/cart/65fc9ae579941973b9829e61/product/65fc9eb079941973b9829e6d",
+							"raw": "http://localhost:8080/api/cart/660db62eeb3d157e265feddf/product/65fd8fbc94d6fa9905eebf4f",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -368,16 +482,16 @@
 							"path": [
 								"api",
 								"cart",
-								"65fc9ae579941973b9829e61",
+								"660db62eeb3d157e265feddf",
 								"product",
-								"65fc9eb079941973b9829e6d"
+								"65fd8fbc94d6fa9905eebf4f"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete cart",
+					"name": "Empty cart",
 					"event": [
 						{
 							"listen": "test",
@@ -394,7 +508,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/cart/65fcb27b0461862c8aef1cee",
+							"raw": "http://localhost:8080/api/cart/660db62eeb3d157e265feddf",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -403,7 +517,93 @@
 							"path": [
 								"api",
 								"cart",
-								"65fcb27b0461862c8aef1cee"
+								"660db62eeb3d157e265feddf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Replace products in cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"product\": \"65fc9ec979941973b9829e6f\",\r\n        \"quantity\": 3\r\n    },\r\n    {\r\n        \"product\": \"65fd8fbc94d6fa9905eebf4f\",\r\n        \"quantity\": 1\r\n    },\r\n    {\r\n        \"product\": \"65fc87d5e333ece3e0191a36\",\r\n        \"quantity\": 8\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/cart/660db62eeb3d157e265feddf",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"cart",
+								"660db62eeb3d157e265feddf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change product quantity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"quantity\": 10 }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/cart/660db62eeb3d157e265feddf/product/65fd8fbc94d6fa9905eebf4f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"cart",
+								"660db62eeb3d157e265feddf",
+								"product",
+								"65fd8fbc94d6fa9905eebf4f"
 							]
 						}
 					},
