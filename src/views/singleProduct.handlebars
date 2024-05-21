@@ -1,13 +1,12 @@
-<div>
+<div class="container">
 	<h2>{{product.title}}</h2>
     <p>{{product.description}}</p>
     <p>Precio: {{product.price}}</p>
     <button type="button" class="addToCartBtn" product={{product}}>Agregar al carrito</button>
-</div>
-
-<div>
+    
     <a href='/products'>Volver a todos los productos</a>
 </div>
+
 
 <script src='/socket.io/socket.io.js'></script>
 <script src="../js/addToCart.js"></script>

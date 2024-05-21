@@ -1,7 +1,5 @@
 import { Router } from 'express'
-import ProductManager from '../dao/services/ProductManager.js'
-import ProductsModel from '../dao/models/productsModel.js'
-import paginateFormat from '../paginateFormat.js'
+import ProductManager from '../dao/mongo/products.mongo.js'
 
 const ProductMngr = new ProductManager()
 const ProductRouter = Router()
@@ -11,17 +9,12 @@ ProductRouter.get('/', async (req, res) => {
 	let page = parseInt(req.query.page)
 	let sort = req.query.sort
 	let query = req.query.query ? JSON.parse(req.query.query) : {}
+	let populate = 'category'
 
 	try {
-		let result = await ProductsModel.paginate(query, {
-			page: page || 1,
-			limit: limit || 10,
-			sort: sort ? { price: sort } : null,
-		})
+		const response = await ProductMngr.getPaginatedProducts(page, limit, sort, query, populate)
 
-		const response = paginateFormat(result, '/products')
-
-		return res.status(200).send(response)
+		return res.status(200).json({ response })
 	} catch (error) {
 		return res.status(500).send({ error: 'Error al obtener productos' })
 	}
@@ -44,7 +37,7 @@ ProductRouter.post('/', async (req, res) => {
 	try {
 		res.status(200).send(await ProductMngr.addProduct(newProduct))
 	} catch (error) {
-		res.status(500).send({ error: 'Error al agregar producto' })
+		res.status(500).send({ error: error.message || 'Error al agregar producto' })
 	}
 })
 

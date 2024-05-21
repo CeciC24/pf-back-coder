@@ -1,5 +1,5 @@
-import CartsModel from '../models/cartsModel.js'
-import ProductManager from './ProductManager.js'
+import CartsModel from './models/carts.model.js'
+import ProductManager from './products.mongo.js'
 
 const ProductMngr = new ProductManager()
 
@@ -70,7 +70,7 @@ class CartManager {
 
 	async updateCart(cid, newCartProducts) {
 		const cart = await this.getCartById(cid)
-		this.emptyCart(cart._id)
+		await this.emptyCart(cart._id)
 
 		cart.products = newCartProducts
 

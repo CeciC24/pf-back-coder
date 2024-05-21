@@ -1,5 +1,7 @@
 function generatePagination(totalPages, currentPage, url) {
     const container = document.querySelector('#pagination')
+
+    let params = new URLSearchParams(window.location.search)
     
     const liPrev = document.createElement('li')
     liPrev.classList.add('page-item')
@@ -9,7 +11,8 @@ function generatePagination(totalPages, currentPage, url) {
         liPrev.innerHTML = `<span class='page-link'>Anterior</span>`
         
     } else {
-        liPrev.innerHTML = `<a class='page-link' href='${url}?page=${currentPage-1}'>Anterior</a>`
+        params.set('page', currentPage - 1)
+        liPrev.innerHTML = `<a class='page-link' href='${url}?${params}'>Anterior</a>`
     }
 
     container.append(liPrev)
@@ -24,7 +27,8 @@ function generatePagination(totalPages, currentPage, url) {
 
             liPage.innerHTML = `<span class='page-link'>${i}</span>`
         } else {
-            liPage.innerHTML = `<a class='page-link' href='${url}?page=${i}'>${i}</a>`
+            params.set('page', i)
+            liPage.innerHTML = `<a class='page-link' href='${url}?${params}'>${i}</a>`
         }
 
         container.append(liPage)
@@ -37,7 +41,8 @@ function generatePagination(totalPages, currentPage, url) {
         liNext.classList.add('disabled')
         liNext.innerHTML = `<span class='page-link'>Siguiente</span>`
     } else {
-        liNext.innerHTML = `<a class='page-link' href='${url}?page=${currentPage+1}'>Siguiente</a>`
+        params.set('page', currentPage + 1)
+        liNext.innerHTML = `<a class='page-link' href='${url}?${params}'>Siguiente</a>`
     }
 
     container.append(liNext)

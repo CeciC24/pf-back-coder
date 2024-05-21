@@ -1,8 +1,8 @@
 import fs from 'fs'
 import { nanoid } from 'nanoid'
-import ProductManager from './FSProductManager.js'
+import ProductManager from './products.memory.js'
 
-const AllProducts = new ProductManager('src/data/products.json')
+const AllProducts = new ProductManager('src/dao/memory/data/products.json')
 
 class FSCartManager {
 	constructor(path) {

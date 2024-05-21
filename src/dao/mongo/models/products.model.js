@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2'
-const { Schema } = mongoose
 
+const { Schema } = mongoose
 const collection = 'products'
 
 const productSchema = new Schema({
@@ -11,7 +11,11 @@ const productSchema = new Schema({
 	code: { type: String, require: true, unique: true },
 	price: { type: Number, require: true },
 	stock: { type: Number, require: true },
-	category: { type: String, require: true },
+	category: {
+		type: mongoose.Schema.Types.ObjectId, // Referencia al modelo Category
+		ref: 'category', // Referencia al nombre del modelo "category"
+		required: true, // Obligatorio tener una categoría asociada
+	},
 	thumbnails: { type: [String] },
 })
 productSchema.plugin(mongoosePaginate)
