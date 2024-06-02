@@ -4,7 +4,7 @@ import UsersModel from './models/users.model.js'
 export default class UserManager {
 	constructor() {}
 
-	async getAll() {
+	async get() {
 		const response = await UsersModel.find()
 		return response
 	}
@@ -14,7 +14,7 @@ export default class UserManager {
 		return response
 	}
 
-	async createUser(userData) {
+	async create(userData) {
 		try {
 			userData.password = createHash(userData.password)
 			const response = await UsersModel.create(userData)
@@ -24,7 +24,7 @@ export default class UserManager {
 		}
 	}
 
-	async updateUser(id, userData) {
+	async update(id, userData) {
 		if (userData.password) {
 			userData.password = createHash(userData.password)
 		}
@@ -33,12 +33,12 @@ export default class UserManager {
 		return response
 	}
 
-	async deleteUser(id) {
+	async delete(id) {
 		const response = await UsersModel.findByIdAndDelete(id)
 		return response
 	}
 
-	async getAllUsersWithCart() {
+	async getAllWithCart() {
 		try {
 			const users = await UsersModel.find().populate('cart.product')
 			return users
@@ -47,7 +47,7 @@ export default class UserManager {
 		}
 	}
 
-	async getPaginatedUsers(page, limit, sort, query) {
+	async getPaginated(page, limit, sort, query) {
 		try {
 			const options = {
 				page: page || 1,

@@ -6,7 +6,7 @@ const CartsRouter = Router()
 
 CartsRouter.get('/', async (req, res) => {
 	try {
-		res.status(200).send(await CartMngr.getCarts())
+		res.status(200).send(await CartMngr.get())
 	} catch (error) {
 		res.status(500).send({ error: 'Error al obtener carritos' })
 	}
@@ -16,7 +16,7 @@ CartsRouter.get('/:cid', async (req, res) => {
 	let cid = req.params.cid
 
 	try {
-		res.status(200).send(await CartMngr.getCartById(cid))
+		res.status(200).send(await CartMngr.getById(cid))
 	} catch (error) {
 		res.status(404).send({ error: 'Carrito no encontrado' })
 	}
@@ -24,7 +24,7 @@ CartsRouter.get('/:cid', async (req, res) => {
 
 CartsRouter.post('/', async (req, res) => {
 	try {
-		let newCart = await CartMngr.addCart()
+		let newCart = await CartMngr.create()
 		res.status(200).send(newCart)
 	} catch (error) {
 		res.status(500).send({ error: 'Error al crear carrito' })
@@ -57,7 +57,7 @@ CartsRouter.delete('/:cid', async (req, res) => {
 	let cid = req.params.cid
 
 	try {
-		res.status(200).send(await CartMngr.emptyCart(cid))
+		res.status(200).send(await CartMngr.empty(cid))
 	} catch (error) {
 		res.status(500).send({ error: 'Error al vaciar carrito' })
 	}
@@ -68,7 +68,7 @@ CartsRouter.put('/:cid', async (req, res) => {
 	let newCartProducts = req.body
 
 	try {
-		res.status(200).send(await CartMngr.updateCart(cid, newCartProducts))
+		res.status(200).send(await CartMngr.update(cid, newCartProducts))
 	} catch (error) {
 		res.status(500).send({ error: 'Error al actualizar carrito' })
 	}

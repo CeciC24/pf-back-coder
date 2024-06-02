@@ -6,24 +6,24 @@ const ProductMngr = new ProductManager()
 class CartManager {
 	constructor() {}
 
-	async addCart(newCart = { products: [] }) {
+	async create(newCart = { products: [] }) {
 		let response = await CartsModel.create(newCart)
 		return response
 	}
 
-	async getCarts() {
+	async get() {
 		let response = await CartsModel.find()
 		return response
 	}
 
-	async getCartById(id) {
+	async getById(id) {
 		let response = await CartsModel.findById(id)
 		return response
 	}
 
 	async addProductToCart(cid, pid) {
-		let cart = await this.getCartById(cid)
-		let product = await ProductMngr.getProductById(pid)
+		let cart = await this.getById(cid)
+		let product = await ProductMngr.getById(pid)
 
 		if (cart) {
 			if (product) {
@@ -41,12 +41,12 @@ class CartManager {
 		} else {
 			throw new Error(`⚠️  Cart ID: ${cid} Not found`)
 		}
-
+s
 		return await cart.save()
 	}
 
 	async deleteProductFromCart(cid, pid) {
-		let cart = await this.getCartById(cid)
+		let cart = await this.getById(cid)
 
 		if (cart) {
 			let productInCart = cart.products.find((p) => p.product._id == pid)
@@ -68,9 +68,9 @@ class CartManager {
 		return await cart.save()
 	}
 
-	async updateCart(cid, newCartProducts) {
-		const cart = await this.getCartById(cid)
-		await this.emptyCart(cart._id)
+	async update(cid, newCartProducts) {
+		const cart = await this.getById(cid)
+		await this.empty(cart._id)
 
 		cart.products = newCartProducts
 
@@ -78,8 +78,8 @@ class CartManager {
 	}
 
 	async updateProductInCart(cid, pid, newQuantity) {
-		let cart = await this.getCartById(cid)
-		let product = await ProductMngr.getProductById(pid)
+		let cart = await this.getById(cid)
+		let product = await ProductMngr.getById(pid)
 
 		if (cart) {
 			if (product) {
@@ -101,7 +101,7 @@ class CartManager {
 		return await cart.save()
 	}
 
-	async emptyCart(id) {
+	async empty(id) {
 		let emptyCart = await CartsModel.findByIdAndUpdate(id, { products: [] })
 		return await emptyCart.save()
 	}

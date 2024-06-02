@@ -6,7 +6,7 @@ const categoryMngr = new CategoryManager()
 
 CategoriesRouter.get('/', async (req, res) => {
 	try {
-		const categories = await categoryMngr.getAll()
+		const categories = await categoryMngr.get()
 		res.json(categories)
 	} catch (error) {
 		res.status(500).json({ message: error.message })
@@ -28,7 +28,7 @@ CategoriesRouter.get('/:id', async (req, res) => {
 
 CategoriesRouter.post('/', async (req, res) => {
 	try {
-		const newCategory = await categoryMngr.createCategory(req.body)
+		const newCategory = await categoryMngr.create(req.body)
 		res.status(201).json(newCategory)
 	} catch (error) {
 		res.status(400).json({ message: error.message })
@@ -38,7 +38,7 @@ CategoriesRouter.post('/', async (req, res) => {
 CategoriesRouter.put('/:id', async (req, res) => {
 	try {
 		const categoryId = req.params.id
-		const updatedCategory = await categoryMngr.updateCategory(categoryId, req.body)
+		const updatedCategory = await categoryMngr.update(categoryId, req.body)
 		res.json(updatedCategory)
 	} catch (error) {
 		res.status(400).json({ message: error.message })
@@ -48,7 +48,7 @@ CategoriesRouter.put('/:id', async (req, res) => {
 CategoriesRouter.delete('/:id', async (req, res) => {
 	try {
 		const categoryId = req.params.id
-		const response = await categoryMngr.deleteCategory(categoryId)
+		const response = await categoryMngr.delete(categoryId)
 		res.json(response)
 	} catch (error) {
 		res.status(500).json({ message: error.message })

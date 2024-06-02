@@ -4,12 +4,12 @@ import paginateFormat from '../../paginateFormat.js'
 class ProductManager {
 	constructor() {}
 
-	async addProduct(newProduct) {
+	async create(newProduct) {
 		const search = await ProductsModel.findOne({ code: newProduct.code })
 
 		if (search) {
 			throw new Error("No se pudo agregar el producto. El campo 'code' ya existe.")
-		} else if (!this.isValidProduct(newProduct)) {
+		} else if (!this.isValid(newProduct)) {
 			throw new Error('No se pudo agregar el producto. Faltan campos.')
 		}
 
@@ -17,7 +17,7 @@ class ProductManager {
 		return response
 	}
 
-	isValidProduct(product) {
+	isValid(product) {
 		if (
 			!product.title ||
 			!product.description ||
@@ -31,28 +31,28 @@ class ProductManager {
 		return true
 	}
 
-	async getProducts() {
+	async get() {
 		let response = await ProductsModel.find()
 		return response
 	}
 
-	async getProductById(id) {
+	async getById(id) {
 		let response = await ProductsModel.findById(id)
 		return response
 	}
 
-	async updateProduct(id, field) {
+	async update(id, field) {
 		await ProductsModel.findByIdAndUpdate(id, field)
 		let updatedProduct = await ProductsModel.findById(id)
 		return updatedProduct
 	}
 
-	async deleteProduct(id) {
+	async delete(id) {
 		let response = await ProductsModel.findByIdAndDelete(id)
 		return response
 	}
 
-	async getAllProductsWithCategories() {
+	async getAllWithCategories() {
 		try {
 			const products = await ProductsModel.find().populate('category')
 			return products
@@ -61,7 +61,7 @@ class ProductManager {
 		}
 	}
 
-	async getPaginatedProducts(page, limit, sort, query, populate = null) {
+	async getPaginated(page, limit, sort, query, populate = null) {
 		try {
 			const options = {
 				page: page || 1,

@@ -3,7 +3,7 @@ import CategoriesModel from "./models/categories.model.js"
 export default class CategoryManager {
 	constructor() {}
 
-	async getAll() {
+	async get() {
 		const response = await CategoriesModel.find()
 		return response
 	}
@@ -13,7 +13,7 @@ export default class CategoryManager {
 		return response
 	}
 
-	async createCategory(newCategory) {
+	async create(newCategory) {
 		const search = await CategoriesModel.findOne({ name: newCategory.name })
 
 		if (search) {
@@ -24,14 +24,14 @@ export default class CategoryManager {
 		return response
 	}
 
-	async updateCategory(id, categoryData) {
+	async update(id, categoryData) {
 		await CategoriesModel.updateOne({ _id: id }, { $set: categoryData })
 
 		const response = await CategoriesModel.findById(id)
 		return response
 	}
 
-	async deleteCategory(id) {
+	async delete(id) {
 		const response = await CategoriesModel.findByIdAndDelete(id)
 		if (!response) {
 			throw new Error('No se pudo eliminar la categoría')

@@ -7,14 +7,14 @@ class ProductManager {
 		this.products = []
 	}
 
-	async addProduct(productToAdd) {
+	async create(productToAdd) {
 		if (fs.existsSync(this.path)) {
-			this.products = await this.getProducts()
+			this.products = await this.get()
 			const search = this.products.find((product) => product.code === productToAdd.code)
 
 			if (search) {
 				throw new Error("⚠️  No se pudo agregar el producto. El campo 'code' ya existe.")
-			} else if (!this.isValidProduct(productToAdd)) {
+			} else if (!this.isValid(productToAdd)) {
 				throw new Error('⚠️  No se pudo agregar el producto. Faltan campos.')
 			}
 		}
@@ -24,7 +24,7 @@ class ProductManager {
 		return productSaved
 	}
 
-	async isValidProduct(product) {
+	async isValid(product) {
 		if (
 			(!product.title ||
 				!product.description ||
@@ -47,7 +47,7 @@ class ProductManager {
 		return productToSave
 	}
 
-	async getProducts() {
+	async get() {
 		if (fs.existsSync(this.path)) {
 			let response = await fs.promises.readFile(this.path, 'utf-8')
 			return JSON.parse(response)
@@ -56,7 +56,7 @@ class ProductManager {
 		}
 	}
 
-	async getProductById(id) {
+	async getById(id) {
 		let search = this.exists(id)
 
 		if (search) {
@@ -66,10 +66,10 @@ class ProductManager {
 		}
 	}
 
-	async updateProduct(id, field) {
-		let oldProduct = await this.getProductById(id)
+	async update(id, field) {
+		let oldProduct = await this.getById(id)
 
-		await this.deleteProduct(id)
+		await this.delete(id)
 
 		let newProduct = { ...oldProduct, ...field }
 
@@ -78,8 +78,8 @@ class ProductManager {
 		return updatedProduct
 	}
 
-	async deleteProduct(id) {
-		this.products = await this.getProducts()
+	async delete(id) {
+		this.products = await this.get()
 		let filter = this.products.filter((product) => product.id !== id)
 
 		if (filter.length === this.products.length) {
@@ -88,11 +88,11 @@ class ProductManager {
 
 		await fs.promises.writeFile(this.path, JSON.stringify(filter, null, '\t'))
 
-		this.products = await this.getProducts()
+		this.products = await this.get()
 	}
 
 	async exists(id) {
-		let response = await this.getProducts()
+		let response = await this.get()
 		let search = response.find((product) => product.id === id)
 
 		return search

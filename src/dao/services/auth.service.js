@@ -57,7 +57,7 @@ export default class AuthManager {
 			password,
 		}
 
-		const userCreated = await userMngr.createUser(newUser)
+		const userCreated = await userMngr.create(newUser)
 
 		const token = generateToken(userCreated)
 		return { message: 'Registro exitoso', token }
@@ -73,7 +73,7 @@ export default class AuthManager {
 			throw new Error('Error de credenciales')
 		}
 
-		const updatedUser = await userMngr.updateUser(user._id, { password: password })
+		const updatedUser = await userMngr.update(user._id, { password: password })
 		const token = generateToken(updatedUser)
 		return { message: 'Contraseña restaurada', token }
 	}

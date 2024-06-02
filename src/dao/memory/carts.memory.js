@@ -10,8 +10,8 @@ class FSCartManager {
 		this.carts = []
 	}
 
-	async addCart() {
-        this.carts = await this.getCarts()
+	async create() {
+        this.carts = await this.get()
 
 		const cartSaved = await this.saveCart({id: nanoid(), products: []}, ...this.carts)
 
@@ -25,7 +25,7 @@ class FSCartManager {
 		return cartToSave
 	}
     
-    async getCarts() {
+    async get() {
         if (fs.existsSync(this.path)) {
             let response = await fs.promises.readFile(this.path, 'utf-8')
             return JSON.parse(response)
@@ -34,8 +34,8 @@ class FSCartManager {
         }
     }
     
-	async getCartById(id) {
-		let response = await this.getCarts()
+	async getById(id) {
+		let response = await this.get()
 		let search = response.find(cart => cart.id === id)
 
 		if (search) {
@@ -59,19 +59,19 @@ class FSCartManager {
                 cart.products.push({id: pid, quantity: 1})
             }
 
-            await this.updateCart(cart)
+            await this.update(cart)
         }
     }
 
-	async updateCart(cart) {
-		await this.deleteCart(cart.id)
+	async update(cart) {
+		await this.delete(cart.id)
 		const updatedCart = await this.saveCart(cart)
 
 		return updatedCart
 	}
 
-	async deleteCart(id) {
-        this.carts = await this.getCarts()
+	async delete(id) {
+        this.carts = await this.get()
 		let filter = this.carts.filter(cart => cart.id !== id)
 
 		if (filter.length === this.carts.length) {
@@ -80,11 +80,11 @@ class FSCartManager {
 
 		await fs.promises.writeFile(this.path, JSON.stringify(filter, null, '\t'))
 
-		this.carts = await this.getCarts()
+		this.carts = await this.get()
 	}
 
     async exists(id) {
-		let response = await this.getCarts()
+		let response = await this.get()
 		let search = response.find(cart => cart.id === id)
 
 		return search

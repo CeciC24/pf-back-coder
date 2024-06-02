@@ -66,7 +66,7 @@ const initializePassport = () => {
 							age: 24,
 							password: 'password',
 						}
-						githubUser = await userMngr.createUser(user)
+						githubUser = await userMngr.create(user)
 					}
 
 					const token = generateToken(githubUser)

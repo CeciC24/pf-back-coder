@@ -6,7 +6,7 @@ const CartRouter = Router()
 
 CartRouter.post('/', async (req, res) => {
 	try {
-		res.send(await CartMngr.addCart())
+		res.send(await CartMngr.create())
 	} catch (error) {
 		res.status(500).send({ error: 'Error al crear carrito' })
 	}
@@ -14,7 +14,7 @@ CartRouter.post('/', async (req, res) => {
 
 CartRouter.get('/', async (req, res) => {
 	try {
-		res.send(await CartMngr.getCarts())
+		res.send(await CartMngr.get())
 	} catch (error) {
 		res.status(500).send({ error: 'Error al obtener carritos' })
 	}
@@ -24,7 +24,7 @@ CartRouter.get('/:cid', async (req, res) => {
 	let cid = req.params.cid
 
 	try {
-		res.send(await CartMngr.getCartById(cid))
+		res.send(await CartMngr.getById(cid))
 	} catch (error) {
 		res.status(404).send({ error: 'Carrito no encontrado' })
 	}

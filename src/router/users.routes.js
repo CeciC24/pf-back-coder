@@ -9,7 +9,7 @@ const userManager = new UserManager()
 // Obtener todos los usuarios
 UsersRouter.get('/', async (req, res) => {
 	try {
-		const users = await userManager.getAll()
+		const users = await userManager.get()
 		res.status(200).json({ users })
 	} catch (error) {
 		console.error(`Error al cargar los usuarios: ${error}`)
@@ -37,7 +37,7 @@ UsersRouter.get('/:id', async (req, res) => {
 UsersRouter.post('/', async (req, res) => {
 	try {
 		const newUser = req.body
-		const result = await userManager.createUser(newUser)
+		const result = await userManager.create(newUser)
 		res.status(201).json({ result })
 	} catch (error) {
 		console.error(`Error al crear el usuario: ${error}`)
@@ -51,7 +51,7 @@ UsersRouter.put('/:id', async (req, res) => {
 	const updatedUser = req.body
 
 	try {
-		res.status(200).send(await userManager.updateUser(id, updatedUser))
+		res.status(200).send(await userManager.update(id, updatedUser))
 	} catch (error) {
 		res.status(500).send({ error: 'Error al actualizar usuario: ' + error.message })
 	}
@@ -61,7 +61,7 @@ UsersRouter.put('/:id', async (req, res) => {
 UsersRouter.delete('/:id', async (req, res) => {
 	try {
 		const { id } = req.params
-		const deletedUser = await userManager.deleteUser(id)
+		const deletedUser = await userManager.delete(id)
 		if (deletedUser) {
 			res.status(200).json({ message: 'Usuario eliminado exitosamente' })
 		} else {
