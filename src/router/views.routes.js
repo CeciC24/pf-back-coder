@@ -10,7 +10,7 @@ import { passportCall } from '../utils.js'
 const router = Router()
 
 const FSProductMngr = new FSProductManager('src/dao/memory/data/products.json')
-const getFSProducts = FSProductMngr.getProducts()
+const getFSProducts = FSProductMngr.get()
 
 // File System routes
 router.get('/home', async (req, res) => {
