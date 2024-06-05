@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import MessagesManager from '../dao/mongo/messages.mongo.js'
+import MessageDTO from '../dao/DTOs/message.dto.js'
 
 const MsgManager = new MessagesManager()
 const MessagesRouter = Router()
@@ -23,9 +24,10 @@ MessagesRouter.get('/:mid', async (req, res) => {
 })
 
 MessagesRouter.post('/', async (req, res) => {
-	let newMessage = req.body
+	let messageData = req.body
 
 	try {
+		const newMessage = new MessageDTO(messageData)
 		res.status(200).send(await MsgManager.create(newMessage))
 	} catch (error) {
 		res.status(500).send({ error: 'Error al agregar mensaje' })

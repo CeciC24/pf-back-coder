@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import CategoryManager from '../dao/mongo/categories.mongo.js'
+import CategoryDTO from '../dao/DTOs/category.dto.js'
 
 const CategoriesRouter = Router()
 const categoryMngr = new CategoryManager()
@@ -27,9 +28,11 @@ CategoriesRouter.get('/:id', async (req, res) => {
 })
 
 CategoriesRouter.post('/', async (req, res) => {
+	const categoryData = req.body
+
 	try {
-		const newCategory = await categoryMngr.create(req.body)
-		res.status(201).json(newCategory)
+		const newCategory = new CategoryDTO(categoryData)
+		res.status(201).json(await categoryMngr.create(newCategory))
 	} catch (error) {
 		res.status(400).json({ message: error.message })
 	}

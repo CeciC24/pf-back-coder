@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import passport from 'passport'
 import UserManager from '../dao/mongo/users.mongo.js'
+import UserDTO from '../dao/DTOs/user.dto.js'
 
 const UsersRouter = Router()
 
@@ -36,7 +37,8 @@ UsersRouter.get('/:id', async (req, res) => {
 // Crear un nuevo usuario
 UsersRouter.post('/', async (req, res) => {
 	try {
-		const newUser = req.body
+		const userData = req.body
+		const newUser = new UserDTO(userData)
 		const result = await userManager.create(newUser)
 		res.status(201).json({ result })
 	} catch (error) {

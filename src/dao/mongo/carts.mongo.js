@@ -1,7 +1,9 @@
 import CartsModel from './models/carts.model.js'
 import ProductManager from './products.mongo.js'
+import TicketsManager from './tickets.mongo.js'
 
 const ProductMngr = new ProductManager()
+const TicketMngr = new TicketsManager()
 
 class CartManager {
 	constructor() {}
@@ -34,14 +36,13 @@ class CartManager {
 				} else {
 					cart.products.push({ product: pid, quantity: 1 })
 				}
-
 			} else {
 				throw new Error(`⚠️  Product ID: ${pid} Not found`)
 			}
 		} else {
 			throw new Error(`⚠️  Cart ID: ${cid} Not found`)
 		}
-s
+		s
 		return await cart.save()
 	}
 
@@ -57,7 +58,6 @@ s
 				} else {
 					cart.products.pull(productInCart)
 				}
-				
 			} else {
 				throw new Error(`⚠️  Product ID: ${pid} Not found`)
 			}
@@ -90,7 +90,6 @@ s
 				} else {
 					throw new Error(`⚠️  Product ID: ${pid} Not found in Cart ID: ${cid}`)
 				}
-
 			} else {
 				throw new Error(`⚠️  Product ID: ${pid} Not found`)
 			}
@@ -104,6 +103,33 @@ s
 	async empty(id) {
 		let emptyCart = await CartsModel.findByIdAndUpdate(id, { products: [] })
 		return await emptyCart.save()
+	}
+
+	async purchaseCart(id, user) {
+		let cart = await this.getById(id)
+		let products = cart.products
+
+		let amountPurchased = 0
+		let productsNotPurchased = []
+
+		products.forEach(async (product) => {
+			try {
+				await ProductMngr.purchase(product.product.id, product.quantity)
+				amountPurchased += product.product.price * product.quantity
+			} catch (error) {
+				productsNotPurchased.push({ product: product.product.id, quantity: product.quantity })
+			}
+		})
+
+		TicketMngr.create({ amount: amountPurchased, purchaser: user.email })
+
+		await this.update(id, productsNotPurchased)
+
+		if (productsNotPurchased.length > 0) {
+			return `No se pudo realizar la compra de los siguientes productos: ` + productsNotPurchased.map((p) => p.product)
+		}
+
+		return await this.getById(id)
 	}
 }
 

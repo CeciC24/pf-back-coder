@@ -86,4 +86,14 @@ CartsRouter.put('/:cid/product/:pid', async (req, res) => {
 	}
 })
 
+CartsRouter.get('/:cid/purchase', async (req, res) => {
+	let cid = req.params.cid
+
+	try {
+		res.status(200).send(await CartMngr.purchaseCart(cid, req.user.user))
+	} catch (error) {
+		res.status(500).send({ error: 'Error al realizar la compra: ' + error.message })
+	}
+})
+
 export default CartsRouter

@@ -77,6 +77,19 @@ class ProductManager {
 			throw new Error('Error al obtener productos paginados')
 		}
 	}
+
+	async purchase(id, quantity) {
+		const product = await ProductsModel.findById(id)
+		if (!product) {
+			throw new Error('Producto no encontrado')
+		}
+		if (product.stock < quantity) {
+			throw new Error('No hay stock suficiente')
+		}
+		product.stock -= quantity
+		await product.save()
+		return product
+	}
 }
 
 export default ProductManager

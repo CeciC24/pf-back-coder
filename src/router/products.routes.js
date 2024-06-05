@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import ProductManager from '../dao/mongo/products.mongo.js'
+import ProductDTO from '../dao/DTOs/product.dto.js'
 
 const ProductMngr = new ProductManager()
 const ProductRouter = Router()
@@ -32,9 +33,10 @@ ProductRouter.get('/:pid', async (req, res) => {
 })
 
 ProductRouter.post('/', async (req, res) => {
-	let newProduct = req.body
+	let productData = req.body
 
 	try {
+		const newProduct = new ProductDTO(productData)
 		res.status(200).send(await ProductMngr.create(newProduct))
 	} catch (error) {
 		res.status(500).send({ error: error.message || 'Error al agregar producto' })

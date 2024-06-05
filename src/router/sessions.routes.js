@@ -5,13 +5,15 @@ import config from '../config/environment.config.js'
 import AuthManager from '../dao/services/auth.service.js'
 import { authorization } from '../middlewares/auth.middleware.js'
 import { passportCall } from '../utils.js'
+import { CurrentUserDTO } from '../dao/DTOs/user.dto.js'
 
 const SessionsRouter = Router()
 const authManager = new AuthManager()
 
 // * Current - JWT
 SessionsRouter.get('/current', passportCall('current'), async (req, res) => {
-	res.status(200).send({ status: 'success', message: 'Usuario autenticado', payload: req.user })
+	const currentUser = new CurrentUserDTO(req.user.user)
+	res.status(200).send({ status: 'success', message: 'Usuario autenticado', payload: currentUser })
 })
 
 // * Login - JWT
