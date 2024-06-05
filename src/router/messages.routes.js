@@ -2,6 +2,9 @@ import { Router } from 'express'
 import MessagesManager from '../dao/mongo/messages.mongo.js'
 import MessageDTO from '../dao/DTOs/message.dto.js'
 
+import { authorization } from '../middlewares/auth.middleware.js'
+import { passportCall } from '../utils.js'
+
 const MsgManager = new MessagesManager()
 const MessagesRouter = Router()
 
@@ -23,7 +26,7 @@ MessagesRouter.get('/:mid', async (req, res) => {
 	}
 })
 
-MessagesRouter.post('/', async (req, res) => {
+MessagesRouter.post('/', passportCall('current'), authorization('user'), async (req, res) => {
 	let messageData = req.body
 
 	try {

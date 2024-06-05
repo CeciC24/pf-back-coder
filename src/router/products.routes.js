@@ -2,6 +2,9 @@ import { Router } from 'express'
 import ProductManager from '../dao/mongo/products.mongo.js'
 import ProductDTO from '../dao/DTOs/product.dto.js'
 
+import { authorization } from '../middlewares/auth.middleware.js'
+import { passportCall } from '../utils.js'
+
 const ProductMngr = new ProductManager()
 const ProductRouter = Router()
 
@@ -32,7 +35,7 @@ ProductRouter.get('/:pid', async (req, res) => {
 	}
 })
 
-ProductRouter.post('/', async (req, res) => {
+ProductRouter.post('/', passportCall('current'), authorization('admin'), async (req, res) => {
 	let productData = req.body
 
 	try {
@@ -43,7 +46,7 @@ ProductRouter.post('/', async (req, res) => {
 	}
 })
 
-ProductRouter.put('/:pid', async (req, res) => {
+ProductRouter.put('/:pid', passportCall('current'), authorization('admin'), async (req, res) => {
 	let pid = req.params.pid
 	let newField = req.body
 
@@ -54,7 +57,7 @@ ProductRouter.put('/:pid', async (req, res) => {
 	}
 })
 
-ProductRouter.delete('/:pid', async (req, res) => {
+ProductRouter.delete('/:pid', passportCall('current'), authorization('admin'), async (req, res) => {
 	let pid = req.params.pid
 
 	try {

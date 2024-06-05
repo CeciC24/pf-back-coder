@@ -1,6 +1,9 @@
 import { Router } from 'express'
 import CartManager from '../dao/mongo/carts.mongo.js'
 
+import { authorization } from '../middlewares/auth.middleware.js'
+import { passportCall } from '../utils.js'
+
 const CartMngr = new CartManager()
 const CartsRouter = Router()
 
@@ -31,7 +34,7 @@ CartsRouter.post('/', async (req, res) => {
 	}
 })
 
-CartsRouter.post('/:cid/product/:pid', async (req, res) => {
+CartsRouter.post('/:cid/product/:pid', passportCall('current'), authorization('user'), async (req, res) => {
 	let cid = req.params.cid
 	let pid = req.params.pid
 
