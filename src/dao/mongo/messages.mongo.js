@@ -1,22 +1,19 @@
-import MessagesModel from "./models/messages.model.js"
+import MessagesRepository from "../../repositories/messages.repository.js"
 
-class MessagesManager {
-	constructor() {}
+export default class MessagesManager {
+	constructor() {
+        this.repository = new MessagesRepository()
+    }
 
 	async create(newMessage) {
-		let response = await MessagesModel.create(newMessage)
-		return response
+		return await this.repository.create(newMessage)
 	}
 
 	async get() {
-		let response = await MessagesModel.find()
-		return response
+		return await this.repository.find()
 	}
 
 	async getById(id) {
-		let response = await MessagesModel.findById(id)
-        return response
+		return await this.repository.findById(id)
 	}
 }
-
-export default MessagesManager

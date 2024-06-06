@@ -1,21 +1,10 @@
-import ProductsModel from './models/products.model.js'
+import ProductsRepository from '../../repositories/products.repository.js'
 import paginateFormat from '../../paginateFormat.js'
 
-class ProductManager {
-	constructor() {}
-
-	async create(newProduct) {
-		const search = await ProductsModel.findOne({ code: newProduct.code })
-
-		if (search) {
-			throw new Error("No se pudo agregar el producto. El campo 'code' ya existe.")
-		} else if (!this.isValid(newProduct)) {
-			throw new Error('No se pudo agregar el producto. Faltan campos.')
-		}
-
-		let response = await ProductsModel.create(newProduct)
-		return response
-	}
+export default class ProductManager {
+	constructor() {
+        this.repository = new ProductsRepository()
+    }
 
 	isValid(product) {
 		if (
@@ -31,31 +20,39 @@ class ProductManager {
 		return true
 	}
 
+	async create(newProduct) {
+        const search = await this.repository.findOne(newProduct.code)
+
+        if (search) {
+            throw new Error("No se pudo agregar el producto. El campo 'code' ya existe.")
+        } else if (!this.isValid(newProduct)) {
+            throw new Error('No se pudo agregar el producto. Faltan campos.')
+        }
+
+        return await this.repository.create(newProduct)
+    }
+
 	async get() {
-		let response = await ProductsModel.find()
-		return response
-	}
+        return await this.repository.find()
+    }
 
-	async getById(id) {
-		let response = await ProductsModel.findById(id)
-		return response
-	}
+    async getById(id) {
+        return await this.repository.findById(id)
+    }
 
-	async update(id, field) {
-		await ProductsModel.findByIdAndUpdate(id, field)
-		let updatedProduct = await ProductsModel.findById(id)
-		return updatedProduct
-	}
+    async update(id, productData) {
+        await this.repository.updateOne(id, productData)
+        return await this.repository.findById(id)
+    }
 
 	async delete(id) {
-		let response = await ProductsModel.findByIdAndDelete(id)
+		let response = await this.repository.findByIdAndDelete(id)
 		return response
 	}
 
 	async getAllWithCategories() {
 		try {
-			const products = await ProductsModel.find().populate('category')
-			return products
+			return await this.repository.findWithCategories()
 		} catch (error) {
 			console.log('Error al obtener todos los productos')
 		}
@@ -69,7 +66,7 @@ class ProductManager {
 				sort: sort ? { price: sort } : null,
 				populate: populate ? populate : null,
 			}
-			const result = await ProductsModel.paginate(query, options)
+			const result = await this.repository.paginate(query, options)
 			
 			const products = paginateFormat(result, '/products')
 			return products
@@ -79,7 +76,7 @@ class ProductManager {
 	}
 
 	async purchase(id, quantity) {
-		const product = await ProductsModel.findById(id)
+		const product = await this.repository.findById(id)
 		if (!product) {
 			throw new Error('Producto no encontrado')
 		}
@@ -91,5 +88,3 @@ class ProductManager {
 		return product
 	}
 }
-
-export default ProductManager

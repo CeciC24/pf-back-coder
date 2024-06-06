@@ -1,20 +1,19 @@
-import TicketsModel from "./models/tickets.model.js";
+import TicketsRepository from "../../repositories/tickets.repository.js";
 
 export default class TicketsManager {
-    constructor() {}
+    constructor() {
+        this.repository = new TicketsRepository()
+    }
 
     async create(newTicket) {
-        let response = await TicketsModel.create(newTicket);
-        return response;
+        return await this.repository.create(newTicket)
     }
 
     async get() {
-        let response = await TicketsModel.find();
-        return response;
+        return await this.repository.find()
     }
 
     async getById(id) {
-        let response = await TicketsModel.findById(id);
-        return response;
+        return await this.repository.findById(id)
     }
 }

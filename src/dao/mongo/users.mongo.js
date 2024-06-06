@@ -1,24 +1,23 @@
 import { createHash } from '../../utils.js'
-import UsersModel from './models/users.model.js'
+import UsersRepository from '../../repositories/users.repository.js'
 
 export default class UserManager {
-	constructor() {}
+	constructor() {
+        this.repository = new UsersRepository()
+    }
 
 	async get() {
-		const response = await UsersModel.find()
-		return response
+		return await this.repository.find()
 	}
 
 	async getById(id) {
-		const response = await UsersModel.findById(id)
-		return response
+		return await this.repository.findById(id)
 	}
 
 	async create(userData) {
 		try {
 			userData.password = createHash(userData.password)
-			const response = await UsersModel.create(userData)
-			return response
+			return await this.repository.create(userData)
 		} catch (error) {
 			console.error(error.message)
 		}
@@ -28,20 +27,17 @@ export default class UserManager {
 		if (userData.password) {
 			userData.password = createHash(userData.password)
 		}
-		await UsersModel.updateOne({ _id: id }, { $set: userData })
-		const response = await UsersModel.findById(id)
-		return response
+		await this.repository.updateOne(id, userData)
+		return await this.repository.findById(id)
 	}
 
 	async delete(id) {
-		const response = await UsersModel.findByIdAndDelete(id)
-		return response
+		return await this.repository.findByIdAndDelete(id)
 	}
 
 	async getAllWithCart() {
 		try {
-			const users = await UsersModel.find().populate('cart.product')
-			return users
+			return await this.repository.getAllWithCart()
 		} catch (error) {
 			console.log('Error al obtener los usuarios con carritos')
 		}
@@ -54,10 +50,8 @@ export default class UserManager {
 				limit: limit || 10,
 				sort: sort ? { price: sort } : null,
 			}
-			const result = await UsersModel.paginate(query, options)
-			
 			// const users = paginateFormat(result, '/users')
-			return result
+			return await this.repository.paginate(query, options)
 		} catch (error) {
 			throw new Error('Error al obtener usuarios paginados')
 		}

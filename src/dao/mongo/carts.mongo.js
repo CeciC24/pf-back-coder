@@ -1,26 +1,25 @@
-import CartsModel from './models/carts.model.js'
+import CartsRepository from '../../repositories/carts.repository.js'
 import ProductManager from './products.mongo.js'
 import TicketsManager from './tickets.mongo.js'
 
 const ProductMngr = new ProductManager()
 const TicketMngr = new TicketsManager()
 
-class CartManager {
-	constructor() {}
+export default class CartManager {
+	constructor() {
+        this.repository = new CartsRepository()
+    }
 
 	async create(newCart = { products: [] }) {
-		let response = await CartsModel.create(newCart)
-		return response
+		return await this.repository.create(newCart)
 	}
 
 	async get() {
-		let response = await CartsModel.find()
-		return response
+		return await this.repository.find()
 	}
 
 	async getById(id) {
-		let response = await CartsModel.findById(id)
-		return response
+		return await this.repository.findById(id)
 	}
 
 	async addProductToCart(cid, pid) {
@@ -42,7 +41,7 @@ class CartManager {
 		} else {
 			throw new Error(`⚠️  Cart ID: ${cid} Not found`)
 		}
-		s
+		
 		return await cart.save()
 	}
 
@@ -101,7 +100,7 @@ class CartManager {
 	}
 
 	async empty(id) {
-		let emptyCart = await CartsModel.findByIdAndUpdate(id, { products: [] })
+		let emptyCart = await this.repository.updateById(id, { products: [] })
 		return await emptyCart.save()
 	}
 
@@ -132,5 +131,3 @@ class CartManager {
 		return await this.getById(id)
 	}
 }
-
-export default CartManager
